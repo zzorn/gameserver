@@ -5,14 +5,7 @@ version := "0.1"
 scalaVersion := "2.9.1"
 
 
-resolvers += "Guicefruit Repository" at "http://guiceyfruit.googlecode.com/svn/repo/releases"
-
 resolvers += "Sonatype Public" at "https://oss.sonatype.org/content/groups/public/"
-
-
-// Inversion of control:
-
-libraryDependencies += "com.google.inject" % "guice" % "3.0"
 
 
 // Logging:
