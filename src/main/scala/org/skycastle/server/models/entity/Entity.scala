@@ -22,9 +22,10 @@ class Entity {
   var wearable: Wearable = null
   var slotted: Slotted = null
 
+  // TODO: Controllable?
   // TODO: Appearance
   // TODO: Spacey?
-  
+
 
 
   def hasAbility(abilityName: Symbol): Boolean = getAbility(abilityName) != null
