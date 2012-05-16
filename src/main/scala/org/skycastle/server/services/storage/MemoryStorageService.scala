@@ -1,6 +1,6 @@
 package org.skycastle.server.services.storage
 
-import org.skycastle.server.models.{ModelRef, Model}
+import org.skycastle.server.models.{Ref, Model}
 import java.util.HashMap
 import org.skycastle.server.utils.ParameterChecker
 

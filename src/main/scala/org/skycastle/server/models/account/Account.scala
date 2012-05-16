@@ -1,6 +1,6 @@
 package org.skycastle.server.models.account
 
-import org.skycastle.server.models.{ModelRef, Model}
+import org.skycastle.server.models.{Ref, Model}
 import org.skycastle.server.models.agent.Agent
 
 
