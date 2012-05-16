@@ -1,13 +1,14 @@
 package org.skycastle.server.models.entity.abilities
 
 import org.skycastle.server.models.agent.Agent
-import org.skycastle.server.models.Ref
+import org.skycastle.server.models.{EntityId, Ref}
+import org.skycastle.server.models.entity.Ability
 
 /**
  * An entity that is owned by some agent.
  */
-class Owned {
+class Owned extends Ability {
 
-  var owner: Ref[Agent] = null
+  var owner: EntityId = null
 
 }

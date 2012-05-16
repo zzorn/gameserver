@@ -1,5 +1,7 @@
 package org.skycastle.server.utils
 
+import org.skycastle.server.models.entity.Entity
+
 /**
  * Provides utility functions for checking prameter preconditions.
  *
@@ -10,6 +12,10 @@ package org.skycastle.server.utils
  * @author Hans Haggstrom
  */
 object ParameterChecker {
+
+  def requireHasId(value: Entity, parameterName: Symbol) {
+    test(value != null && value.id != 0, value, parameterName, "not have an unitialized (zero) id, or be null")
+  }
 
   def requireNotNull(value: Any, parameterName: Symbol) {
     test(value != null, value, parameterName, "not be null")

@@ -1,11 +1,13 @@
 package org.skycastle.server.models.entity.abilities
 
+import org.skycastle.server.models.entity.Ability
+
 /**
  * Entity is a piece of clothing, or can be worn as one
  */
-class Wearable {
+class Wearable extends Ability {
 
-  var slot: Symbol = null
+  var slotType: Symbol = null
 
   // TODO: Size it fits for
 
