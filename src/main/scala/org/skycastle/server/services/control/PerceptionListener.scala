@@ -5,5 +5,6 @@ package org.skycastle.server.services.control
  */
 trait PerceptionListener {
 
+  def onPerception(perception: Perception)
 
 }

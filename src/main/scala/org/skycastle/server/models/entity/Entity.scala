@@ -9,10 +9,20 @@ import scala.collection.JavaConversions._
 /**
  *
  */
+// TODO: Listener that is notified when abilities are added or removed or changed?
 class Entity extends Model {
+
+
 
   // Different abilities that the entity may have, or null if entity doesn't have that ability.
   // When storing the entity, ideally just store the abilities with non-null values, and ignore the rest, to minimize storage size.
+
+  private @transient var listeners: List[EntityListener] = null
+  private var abilities: Map[Symbol, Ability] = Map()
+
+  def setAbility(abilityName: Symbol, ability: Ability) {
+    abilities += abilityName -> ability
+  }
 
   var physical: Physical = null
   var containing: Containing = null
@@ -64,5 +74,12 @@ class Entity extends Model {
     abilities
   }
 
+  def addListener(entityListener: EntityListener) {
+    if (listeners == null) listeners = List(entityListener)
+    else listeners ::= entityListener
+  }
 
+  def removeListener(entityListener: EntityListener) {
+    if (listeners != null) listeners -= entityListener
+  }
 }

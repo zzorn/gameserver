@@ -8,6 +8,8 @@ import org.skycastle.server.models.entity.{Ability, Entity}
 /**
  * Entity can contain other things.
  */
+// TODO: Change this, so that the container can have many slots, with different properties?
+//       That way, we could maybe combine slotted with gripper and container??  Or maybe not
 class Containing extends Ability{
 
   var capacity_kg = 10.0

@@ -11,6 +11,7 @@ import org.skycastle.server.models.entity.{Ability, Entity}
  * a hook on a wall that can hold a hat and something hangable like a cloak, etc.
  * Maybe even a bench with seats, a car with driver, gunner, navigator positions, and so on.
  */
+// TODO: Clothing can be stacked on a slot, as long as size allows.  Decreases mobility a bit..
 class Slotted extends Ability {
 
   var slots: List[Slot] = Nil

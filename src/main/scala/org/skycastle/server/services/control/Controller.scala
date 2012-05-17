@@ -9,6 +9,7 @@ import org.skycastle.server.utils.ParameterChecker
 /**
  * Handles control of some entity
  */
+// TODO: Should this be a controllable ability?
 class Controller(registry: Registry) {
 
   private var listeners: List[PerceptionListener] = Nil
@@ -25,11 +26,28 @@ class Controller(registry: Registry) {
     findActionMethods()
   }
 
-
+  /**
+   * Called when the controlled entity changes
+   */
   def findActionMethods() {
     actionMethods = controlledEntity.getAbilities.map(_.getActionMethods).foldLeft(Map[Symbol, Method]()) {_ ++ _}
   }
 
+  /**
+   * Called by the entity or sensors related to it, when it perceives something.
+   * Sends the perception to the player / ai controlling the entity.
+   */
+  def sendPerception(perception: Perception) {
+    // TODO: Accumulate packets, send when enough or enough time since the first?
+    // To start with, just send them immediately
+    listeners foreach {_.onPerception(perception)}
+  }
+
+  /**
+   * Invoked to do an action with the controlled entity
+   * @param action id of action to do
+   * @param parameters named parameters for action
+   */
   def doAction(action: Symbol, parameters: Map[Symbol, Any]) {
     actionMethods.get(action) match {
       case None => throw new Error("No action named "+action.name+" found for entity " + controlledEntity)
