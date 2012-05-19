@@ -2,13 +2,16 @@ package org.skycastle.server.services.storage
 
 import org.skycastle.server.models.entity.Entity
 import org.skycastle.server.models.{EntityId, Ref, Model}
+import org.skycastle.server.services.Service
+import org.skycastle.server.models.account.Account
 
 
 /**
+ * Provides persistent storage of entities and models.
  *
+ * Thread safe.
  */
-// TODO: Needs to handle multi-threaded access
-trait StorageService {
+trait StorageService extends Service {
 
   /**
    * @return the model with the specified id.  Throws an exception if not found.
@@ -43,5 +46,30 @@ trait StorageService {
    *         If the stored model did not yet have any id, a new one is generated and returned, as well as assigned to it.
    */
   def save[T <: Model](model: T): Long
+
+
+  /**
+   * Saves a new account.
+   * @param accountName the account name to use.
+   * @param account the account to save.
+   * @return true if the accountName was free, false if the account name was in use.
+   */
+  def saveNewAccount(accountName: String, account: Account): Boolean
+
+  /**
+   * Updates the stored account with the specified name, with a new object.
+   */
+  def updateAccount(accountName: String, account: Account)
+
+  /**
+   * @return the account with the specified name, or null if not found.
+   */
+  def loadAccount(accountName: String): Account
+
+  /**
+   * @return true if there exists an account with the specified name.
+   */
+  def accountExists(accountName: String): Boolean
+
 
 }

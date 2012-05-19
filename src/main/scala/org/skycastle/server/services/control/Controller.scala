@@ -30,7 +30,7 @@ class Controller(registry: Registry) {
    * Called when the controlled entity changes
    */
   def findActionMethods() {
-    actionMethods = controlledEntity.getAbilities.map(_.getActionMethods).foldLeft(Map[Symbol, Method]()) {_ ++ _}
+    actionMethods = controlledEntity.getAbilities.values.map(_.getActionMethods).foldLeft(Map[Symbol, Method]()) {_ ++ _}
   }
 
   /**

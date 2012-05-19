@@ -26,3 +26,11 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "1.7.2" % "test"
 
 libraryDependencies += "org.yaml" % "snakeyaml" % "1.11-SNAPSHOT"
 
+
+// Networking
+
+libraryDependencies += "org.apache.mina" % "mina-core" % "2.0.4"
+
+
+// Password hashing
+libraryDependencies += "org.mindrot" % "jbcrypt" % "0.3m"

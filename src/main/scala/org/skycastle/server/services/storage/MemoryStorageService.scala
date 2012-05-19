@@ -1,17 +1,21 @@
 package org.skycastle.server.services.storage
 
 import org.skycastle.server.models.{Ref, Model}
-import java.util.HashMap
 import org.skycastle.server.utils.ParameterChecker
+import org.skycastle.server.registry.Registry
+import java.util.concurrent.ConcurrentHashMap
+import org.skycastle.server.models.account.Account
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Just stores things in memory.  Useful for testing.
  */
-class MemoryStorageService extends StorageService {
+class MemoryStorageService(registry: Registry) extends StorageService {
 
-  private val storage = new HashMap[Long, Model]()
+  private val storage = new ConcurrentHashMap[Long, Model]()
+  private val accounts = new ConcurrentHashMap[String, Account]()
 
-  private var _nextFreeId: Long = 1
+  private val _nextFreeId: AtomicLong = new AtomicLong(1)
 
 
   /**
@@ -36,7 +40,33 @@ class MemoryStorageService extends StorageService {
   }
 
   private def nextFreeId: Long = {
-    _nextFreeId += 1
-    _nextFreeId - 1
+    _nextFreeId.getAndIncrement
   }
+
+
+  def saveNewAccount(accountName: String, account: Account): Boolean = {
+    ParameterChecker.requireIsIdentifier(accountName, 'accountName)
+
+    val existing = accounts.putIfAbsent(accountName, account)
+
+    // Return true on success (no earlier value)
+    existing == null
+  }
+
+  def updateAccount(accountName: String, account: Account) {
+    ParameterChecker.requireIsIdentifier(accountName, 'accountName)
+
+    accounts.put(accountName, account)
+  }
+
+  def loadAccount(accountName: String): Account = {
+    accounts.get(accountName)
+  }
+
+  def accountExists(accountName: String): Boolean = {
+    accounts.contains(accountName)
+  }
+
+  def init() {storage.clear()}
+  def shutdown() {}
 }

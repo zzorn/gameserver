@@ -1,6 +1,7 @@
 package org.skycastle.server
 
-import registry.{TestRegistry, Registry}
+import registry.{RegistryImpl, Registry}
+import utils.Logging
 
 
 /**
@@ -10,16 +11,19 @@ object Server {
 
   def main(args: Array[String]) {
 
-    // Initialize context
-    val registry: Registry = new TestRegistry()
+    Logging.initializeLogging()
 
     // TODO: Read arguments
 
-    // TODO: Load configuration
+    // TODO: Load configuration?
+
+    // Initialize context
+    val registry: Registry = new RegistryImpl()
+
+    // Start
+    registry.init()
 
     // TODO: Load any stored data
-
-    // TODO: Start listening to client connections
 
 
   }

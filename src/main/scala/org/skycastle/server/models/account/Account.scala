@@ -1,14 +1,15 @@
 package org.skycastle.server.models.account
 
-import org.skycastle.server.models.{Ref, Model}
-import org.skycastle.server.models.agent.Agent
+import org.skycastle.server.models.{EntityId, Model}
 
 
 /**
  *
  */
-class Account extends Model {
+class Account(val name: String) {
 
-  var characters: List[ModelRef[Agent]] = Nil
+  var hashedPassword: String = null
+
+  var characters: List[EntityId] = Nil
 
 }
