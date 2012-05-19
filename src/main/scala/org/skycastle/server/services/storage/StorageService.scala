@@ -3,7 +3,7 @@ package org.skycastle.server.services.storage
 import org.skycastle.server.models.entity.Entity
 import org.skycastle.server.models.{EntityId, Ref, Model}
 import org.skycastle.server.services.Service
-import org.skycastle.server.models.account.Account
+import org.skycastle.server.models.account.User
 
 
 /**
@@ -47,6 +47,16 @@ trait StorageService extends Service {
    */
   def save[T <: Model](model: T): Long
 
+  /**
+   * Stores the specified entity to the storage.
+   * @return the id of the stored entity.
+   *         If the stored model did not yet have any id, a new one is generated and returned, as well as assigned to it.
+   */
+  def saveEntity(entity: Entity): EntityId = {
+    save(entity)
+    entity.entityId
+  }
+
 
   /**
    * Saves a new account.
@@ -54,17 +64,17 @@ trait StorageService extends Service {
    * @param account the account to save.
    * @return true if the accountName was free, false if the account name was in use.
    */
-  def saveNewAccount(accountName: String, account: Account): Boolean
+  def saveNewAccount(accountName: String, account: User): Boolean
 
   /**
    * Updates the stored account with the specified name, with a new object.
    */
-  def updateAccount(accountName: String, account: Account)
+  def updateAccount(accountName: String, account: User)
 
   /**
    * @return the account with the specified name, or null if not found.
    */
-  def loadAccount(accountName: String): Account
+  def loadAccount(accountName: String): User
 
   /**
    * @return true if there exists an account with the specified name.

@@ -2,33 +2,53 @@ package org.skycastle.server.services.network
 
 import org.apache.mina.core.session.IoSession
 import org.skycastle.server.registry.Registry
-import org.skycastle.server.models.account.Account
+import org.skycastle.server.models.account.User
+import org.skycastle.server.models.EntityId
+import org.skycastle.server.models.entity.Entity
+import org.skycastle.server.utils.Logging
 
 /**
  *
  */
-class GameSession(registry:  Registry, networkSession: IoSession) {
-
-  private var loggedIn = false
-  private var account: Account = null
-
+class GameSession(registry:  Registry, networkSession: IoSession, accountName: String, val controlledEntity: EntityId) extends Logging {
 
   def getId: Long = networkSession.getId
 
-  def handleMessage(message: Any) {
+  def handleMessage(message: Message) {
+    // DEBUG:
     println("Message "+getId + ": "+message)
 
-    if (!loggedIn) {
-
+    // Send the message to the active character
+    val entity: Entity = registry.storageService.getEntity(controlledEntity)
+    if (entity != null) {
+      // NOTE: The abilities in the entity are responsible for saving the entity if they modify it
+      val handled = entity.handleMessage(registry, message)
+      if (!handled) log.debug("Unhandled message of type '"+message.action+"' for entity " + entity.entityId)
     }
+  }
 
+  def handleSessionOpened() {
+    if (controlledEntity != null) {
+      val entity = registry.storageService.getEntity(controlledEntity)
+      if (entity != null) {
+        entity.onControllingSessionChanged(registry, this)
+      }
+    }
   }
 
   def handleSessionClosed() {
-    println("Closed "+getId)
-
+    if (controlledEntity != null) {
+      val entity = registry.storageService.getEntity(controlledEntity)
+      if (entity != null) {
+        entity.onControllingSessionChanged(registry, null)
+      }
+    }
   }
 
+
+  def sendMessage(message: Message) {
+    networkSession.write(message)
+  }
 
 
 }

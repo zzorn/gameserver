@@ -7,6 +7,8 @@ import org.skycastle.server.models.{UndefinedId, EntityId, Model}
 
 import scala.collection.JavaConversions._
 import scala.transient
+import org.skycastle.server.services.network.{GameSession, Message}
+import org.skycastle.server.registry.Registry
 
 /**
  *
@@ -20,6 +22,8 @@ class Entity extends Model {
   private var abilities: Map[Symbol, Ability] = Map()
   @transient private var listeners: List[EntityListener] = null
   @transient private lazy val _entityId = EntityId(id)
+
+  private var controllingSession: Long = 0L
 
   /**
    * @return the entityId of this entity, or UndefinedId if it has not yet been stored.
@@ -57,5 +61,24 @@ class Entity extends Model {
 
   def removeListener(entityListener: EntityListener) {
     if (listeners != null) listeners -= entityListener
+  }
+
+
+  def handleMessage(registry: Registry, message: Message): Boolean = {
+    // Handle with first matching handler, return true if message handled
+    val handled = (abilities.values find( _.handleMessage(registry, message))) != null
+
+    // TODO: Some mechanism for abilities to indicate whether the entity should be saved?
+    if (handled) registry.storageService.saveEntity(this)
+    handled
+  }
+
+  def onControllingSessionChanged(registry: Registry, session: GameSession) {
+    if (session == null) controllingSession = 0L
+    else controllingSession = session.getId
+
+    abilities.values foreach( _.onControllingSessionChanged(registry, session))
+
+    registry.storageService.saveEntity(this)
   }
 }

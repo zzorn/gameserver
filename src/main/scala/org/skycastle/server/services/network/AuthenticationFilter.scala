@@ -6,6 +6,10 @@ import org.apache.mina.core.session.IoSession
 import org.apache.mina.core.filterchain.{IoFilter, IoFilterAdapter}
 import org.skycastle.server.services.authenticator.{AccountCreationError, AccountCreated}
 
+object AuthenticationFilter {
+  val Account = "ACCOUNT"
+}
+
 /**
  * Filter that requires users to either authenticate or create a new account before it forwards their messages.
  */
@@ -54,8 +58,8 @@ class AuthenticationFilter(context: Registry) extends IoFilterAdapter with Loggi
       getAccountAndPw(data) match {
         case Some((accountName, pw)) => context.authenticationService.authenticate(accountName, pw) match {
           case Some(account) =>
-            session.setAttribute("ACCOUNT", account.name)
-            log.info("User " + account.name + " logged in.")
+            session.setAttribute(AuthenticationFilter.Account, account.accountName)
+            log.info("User " + account.accountName + " logged in.")
             session.write(loginOk)
           case None => onError(invalidLogin)
         }
@@ -68,7 +72,7 @@ class AuthenticationFilter(context: Registry) extends IoFilterAdapter with Loggi
       getAccountAndPw(data) match {
         case Some((accountName, pw)) => context.authenticationService.createAccount(accountName, pw) match {
           case AccountCreated =>
-            session.setAttribute("ACCOUNT", accountName)
+            session.setAttribute(AuthenticationFilter.Account, accountName)
             log.info("Created a new account for user " + accountName)
             session.write(createdOk)
           case AccountCreationError(errorCode) =>
@@ -83,7 +87,7 @@ class AuthenticationFilter(context: Registry) extends IoFilterAdapter with Loggi
         // DEBUG:
         println("Auth filter Received message = " + message)
 
-        val accountName = session.getAttribute("ACCOUNT").asInstanceOf[String]
+        val accountName = session.getAttribute(AuthenticationFilter.Account).asInstanceOf[String]
         if (accountName != null) {
           // Logged in already, forward message
           nextFilter.messageReceived(session, message)

@@ -1,6 +1,6 @@
 package org.skycastle.server.services.authenticator
 import org.skycastle.server.models.Ref
-import org.skycastle.server.models.account.Account
+import org.skycastle.server.models.account.User
 import org.skycastle.server.services.Service
 
 
@@ -21,7 +21,7 @@ case object AccountCreationDenied extends AccountCreationError('AccountCreationD
  */
 trait AuthenticationService extends Service {
 
-  def authenticate(accountName: String, pw: Array[Char]): Option[Account]
+  def authenticate(accountName: String, pw: Array[Char]): Option[User]
 
   def createAccount(accountName: String, pw: Array[Char]): AccountCreationResponse
 

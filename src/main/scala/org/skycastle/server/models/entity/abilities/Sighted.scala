@@ -7,4 +7,6 @@ import org.skycastle.server.models.entity.Ability
  */
 class Sighted extends Ability {
 
+  // TODO: On perception, get network service, and send message to session controlling this entity
+
 }

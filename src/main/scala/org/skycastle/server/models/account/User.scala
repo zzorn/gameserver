@@ -6,9 +6,11 @@ import org.skycastle.server.models.{EntityId, Model}
 /**
  *
  */
-class Account(val name: String) {
+class User(val accountName: String) {
 
   var hashedPassword: String = null
+
+  var currentCharacter: EntityId = null
 
   var characters: List[EntityId] = Nil
 

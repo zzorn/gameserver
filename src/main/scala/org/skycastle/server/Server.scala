@@ -9,6 +9,8 @@ import utils.Logging
  */
 object Server {
 
+  var registry: Registry = null
+
   def main(args: Array[String]) {
 
     Logging.initializeLogging()
@@ -18,7 +20,7 @@ object Server {
     // TODO: Load configuration?
 
     // Initialize context
-    val registry: Registry = new RegistryImpl()
+    registry = new RegistryImpl()
 
     // Start
     registry.init()

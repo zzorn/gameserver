@@ -1,7 +1,7 @@
 package org.skycastle.server.services.authenticator
 
 import org.skycastle.server.registry.Registry
-import org.skycastle.server.models.account.Account
+import org.skycastle.server.models.account.User
 import org.mindrot.jbcrypt.BCrypt
 import org.skycastle.server.utils.StringUtils
 
@@ -23,7 +23,7 @@ final class AuthenticationServiceImpl(context: Registry) extends AuthenticationS
       val hashedPassword = BCrypt.hashpw(new String(pw), BCrypt.gensalt(12));
       clearCharArray(pw)
 
-      val account = new Account(accountName)
+      val account = new User(accountName)
       account.hashedPassword = hashedPassword
 
       val success = context.storageService.saveNewAccount(accountName, account)
@@ -44,7 +44,7 @@ final class AuthenticationServiceImpl(context: Registry) extends AuthenticationS
   }
 
 
-  def authenticate(accountName: String, pw: Array[Char]): Option[Account] = {
+  def authenticate(accountName: String, pw: Array[Char]): Option[User] = {
     val result = if (!isValidAccountName(accountName)) None
     else {
       val account = context.storageService.loadAccount(accountName)
