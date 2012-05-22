@@ -1,4 +1,4 @@
-package org.skycastle.server.services.network
+package org.skycastle.server.services.network.protocol
 
 import org.skycastle.server.utils.ParameterChecker
 
@@ -11,5 +11,5 @@ import org.skycastle.server.utils.ParameterChecker
 case class Message(action: Symbol, parameters: Map[Symbol, Any]) {
   ParameterChecker.requireIsIdentifier(action, 'action)
 
-  override def toString = "Message " + action.name + " {" +parameters.mkString(", ")+ "}"
+  override def toString = "Message " + action.name + " {" + parameters.mkString(", ") + "}"
 }

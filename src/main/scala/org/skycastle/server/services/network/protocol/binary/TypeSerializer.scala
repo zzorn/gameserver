@@ -1,6 +1,5 @@
 package org.skycastle.server.services.network.protocol.binary
 
-import java.nio.ByteBuffer
 import org.apache.mina.core.buffer.IoBuffer
 
 /**

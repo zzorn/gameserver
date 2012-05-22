@@ -1,10 +1,9 @@
 package org.skycastle.server.services.network.protocol
 
-import org.skycastle.server.services.network.Message
+import org.skycastle.server.utils.Logging
 import org.apache.mina.core.buffer.IoBuffer
 import org.apache.mina.core.session.IoSession
 import org.apache.mina.filter.codec._
-import org.skycastle.server.utils.Logging
 
 /**
  * A way of encoding and decoding Messages to and from a stream of bytes.

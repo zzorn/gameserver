@@ -10,9 +10,9 @@ import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 import org.skycastle.server.registry.Registry
 import org.apache.mina.filter.executor.{OrderedThreadPoolExecutor, ExecutorFilter}
 import org.skycastle.server.services.network.protocol.binary.BinaryProtocol
+import org.skycastle.server.services.network.protocol.Message
 import org.skycastle.server.models.account.User
 import org.skycastle.server.models.EntityId
-import org.skycastle.server.models.entity.Entity
 
 /**
  *
@@ -23,7 +23,7 @@ class MinaNetworkService(registry: Registry,
                          bufferSize: Int = 2048,
                          idleTimeSeconds: Int = 30) extends IoHandlerAdapter with NetworkService with Logging {
 
-  private val sessions: ConcurrentMap[Long, GameSession] = new ConcurrentHashMap[Long, GameSession]()
+  private val gameSessions: ConcurrentMap[Long, GameSession] = new ConcurrentHashMap[Long, GameSession]()
   private var acceptor: NioSocketAcceptor = null
   private var executor: OrderedThreadPoolExecutor = null
 
@@ -40,7 +40,7 @@ class MinaNetworkService(registry: Registry,
 
 
   def sendMessage(sender: EntityId, session: Long, message: Message): Boolean = {
-    val gameSession: GameSession = sessions.get(session)
+    val gameSession: GameSession = gameSessions.get(session)
     if (gameSession != null && gameSession.controlledEntity == sender) {
       gameSession.sendMessage(message)
       true
@@ -85,15 +85,11 @@ class MinaNetworkService(registry: Registry,
 
 
   override def sessionOpened(session: IoSession) {
-    // Create player session object
-    val account: User = registry.storageService.loadAccount(session.getAttribute(AuthenticationFilter.Account).asInstanceOf[String])
-    val gameSession = new GameSession(registry, session, account.accountName, account.currentCharacter)
-    sessions.put(session.getId, gameSession)
-    gameSession.handleSessionOpened()
   }
 
+
   override def messageReceived(session: IoSession, message: AnyRef) {
-    val gameSession: GameSession = sessions.get(session.getId)
+    val gameSession: GameSession = getGameSession(session)
     if (gameSession == null) throw new Exception("Message received for unknown session " + session.getId)
     if (message == null) throw new Exception("Message was null")
     if (!classOf[Message].isInstance(message)) throw new Exception("Message was not a Message object, instead it was of type " + message.getClass())
@@ -101,12 +97,31 @@ class MinaNetworkService(registry: Registry,
     gameSession.handleMessage(message.asInstanceOf[Message])
   }
 
-  override def sessionClosed(session: IoSession) {
-    val gameSession: GameSession = sessions.get(session.getId)
-    if (gameSession == null) throw new Exception("Session closed for unknown session " + session.getId)
+  def getGameSession(session: IoSession): GameSession = {
+    var gameSession: GameSession = gameSessions.get(session.getId)
+    if (gameSession == null) {
+      gameSession = createGameSession(session)
+      gameSessions.put(session.getId, gameSession)
+    }
+    gameSession
+  }
 
-    gameSession.handleSessionClosed()
-    sessions.remove(session.getId)
+
+  private def createGameSession(session: IoSession): GameSession = {
+    // Create player session object
+    val account: User = registry.storageService.loadAccount(session.getAttribute(AuthenticationFilter.Account).asInstanceOf[String])
+    val gameSession = new GameSession(registry, session, account.accountName, account.currentCharacter)
+    gameSessions.put(session.getId, gameSession)
+    gameSession.handleLoggedIn()
+    gameSession
+  }
+
+  override def sessionClosed(session: IoSession) {
+    val gameSession: GameSession = gameSessions.get(session.getId)
+    if (gameSession != null) {
+      gameSession.handleSessionClosed()
+      gameSessions.remove(session.getId)
+    }
   }
 
   override def sessionIdle(session: IoSession, status: IdleStatus) {

@@ -5,6 +5,7 @@ import org.skycastle.server.utils.Logging
 import org.apache.mina.core.session.IoSession
 import org.apache.mina.core.filterchain.{IoFilter, IoFilterAdapter}
 import org.skycastle.server.services.authenticator.{AccountCreationError, AccountCreated}
+import protocol.Message
 
 object AuthenticationFilter {
   val Account = "ACCOUNT"

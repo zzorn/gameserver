@@ -2,10 +2,10 @@ package org.skycastle.server.services.network
 
 import org.apache.mina.core.session.IoSession
 import org.skycastle.server.registry.Registry
-import org.skycastle.server.models.account.User
 import org.skycastle.server.models.EntityId
 import org.skycastle.server.models.entity.Entity
 import org.skycastle.server.utils.Logging
+import org.skycastle.server.services.network.protocol.Message
 
 /**
  *
@@ -27,7 +27,7 @@ class GameSession(registry:  Registry, networkSession: IoSession, accountName: S
     }
   }
 
-  def handleSessionOpened() {
+  def handleLoggedIn() {
     if (controlledEntity != null) {
       val entity = registry.storageService.getEntity(controlledEntity)
       if (entity != null) {

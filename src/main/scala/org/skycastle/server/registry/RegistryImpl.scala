@@ -5,11 +5,12 @@ import org.skycastle.server.services.network.MinaNetworkService
 import org.skycastle.server.services.Service
 import org.skycastle.server.services.authenticator.AuthenticationServiceImpl
 import org.skycastle.server.services.account.AccountServiceImpl
+import org.skycastle.server.utils.Logging
 
 /**
  *
  */
-class RegistryImpl extends Registry {
+class RegistryImpl extends Registry with Logging {
 
   private var services: List[Service] = Nil
 
@@ -21,11 +22,17 @@ class RegistryImpl extends Registry {
   val networkService = addService(new MinaNetworkService(this, port, true))
 
   def init() {
-    services foreach {_.init()}
+    services foreach {service =>
+      log.info("Initializing service " + service.getClass.getSimpleName)
+      service.init()
+    }
   }
 
   def shutdown() {
-    services foreach {_.shutdown()}
+    services foreach {service =>
+      log.info("Shutting down service " + service.getClass.getSimpleName)
+      service.shutdown()
+    }
   }
 
   private def addService[T <: Service](service: T): T = {

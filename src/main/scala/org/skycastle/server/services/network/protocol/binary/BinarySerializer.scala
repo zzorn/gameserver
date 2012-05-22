@@ -3,8 +3,8 @@ package org.skycastle.server.services.network.protocol.binary
 import org.apache.mina.core.buffer.IoBuffer
 import org.skycastle.server.utils.Logging
 import java.nio.charset.Charset
-import org.skycastle.server.models.{ModelRef, EntityId}
-import org.skycastle.server.services.network.Message
+import org.skycastle.server.models.EntityId
+import org.skycastle.server.services.network.protocol.Message
 
 
 /**

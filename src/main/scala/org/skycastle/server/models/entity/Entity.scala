@@ -1,13 +1,13 @@
 package org.skycastle.server.models.entity
 
 import abilities._
-import java.lang.reflect.Field
 import org.skycastle.server.utils.ParameterChecker
 import org.skycastle.server.models.{UndefinedId, EntityId, Model}
 
 import scala.collection.JavaConversions._
 import scala.transient
-import org.skycastle.server.services.network.{GameSession, Message}
+import org.skycastle.server.services.network.protocol.Message
+import org.skycastle.server.services.network.{GameSession}
 import org.skycastle.server.registry.Registry
 
 /**

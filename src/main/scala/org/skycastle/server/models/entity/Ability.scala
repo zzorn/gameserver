@@ -1,9 +1,8 @@
 package org.skycastle.server.models.entity
 
-import java.lang.reflect.Method
 import scala.collection.JavaConversions._
-import org.skycastle.server.utils.StringUtils
-import org.skycastle.server.services.network.{GameSession, Message}
+import org.skycastle.server.services.network.protocol.Message
+import org.skycastle.server.services.network.GameSession
 import org.skycastle.server.registry.Registry
 
 /**

@@ -2,6 +2,7 @@ package org.skycastle.server.services.network
 
 import org.skycastle.server.services.Service
 import org.skycastle.server.models.EntityId
+import protocol.Message
 
 /**
  *

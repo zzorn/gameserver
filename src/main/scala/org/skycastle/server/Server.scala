@@ -7,13 +7,15 @@ import utils.Logging
 /**
  *
  */
-object Server {
+object Server extends Logging {
 
   var registry: Registry = null
 
   def main(args: Array[String]) {
 
     Logging.initializeLogging()
+
+    log.info("Server started")
 
     // TODO: Read arguments
 

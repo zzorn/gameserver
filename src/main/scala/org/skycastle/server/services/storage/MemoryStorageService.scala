@@ -60,10 +60,14 @@ class MemoryStorageService(registry: Registry) extends StorageService {
   }
 
   def loadAccount(accountName: String): User = {
+    ParameterChecker.requireIsIdentifier(accountName, 'accountName)
+
     accounts.get(accountName)
   }
 
   def accountExists(accountName: String): Boolean = {
+    ParameterChecker.requireIsIdentifier(accountName, 'accountName)
+
     accounts.contains(accountName)
   }
 

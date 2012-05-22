@@ -1,8 +1,7 @@
 package org.skycastle.server.services.network.protocol.binary
 
 import _root_.org.apache.mina.core.buffer.IoBuffer
-import org.skycastle.server.services.network.protocol.MessageProtocol
-import org.skycastle.server.services.network.Message
+import org.skycastle.server.services.network.protocol.{Message, MessageProtocol}
 
 
 /**
