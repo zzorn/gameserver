@@ -21,6 +21,10 @@ object ParameterChecker {
     test(value != null, value, parameterName, "not be null")
   }
 
+  def requireNotZero(value: Double, parameterName: Symbol) {
+    test(value != null && value != 0, value, parameterName, "not be zero")
+  }
+
   def requireNotEmpty(value: Iterable[_], parameterName: Symbol) {
     requireNotNull(value, parameterName)
 

@@ -1,6 +1,7 @@
 package org.skycastle.server.models.account
 
 import org.skycastle.server.models.{EntityId, Model}
+import java.util.ArrayList
 
 
 /**
@@ -12,6 +13,6 @@ class User(val accountName: String) {
 
   var currentCharacter: EntityId = null
 
-  var characters: List[EntityId] = Nil
+  var characters: ArrayList[EntityId] = new ArrayList[EntityId]()
 
 }

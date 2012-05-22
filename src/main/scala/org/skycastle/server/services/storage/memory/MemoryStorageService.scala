@@ -1,4 +1,4 @@
-package org.skycastle.server.services.storage
+package org.skycastle.server.services.storage.memory
 
 import org.skycastle.server.models.{Ref, Model}
 import org.skycastle.server.utils.ParameterChecker
@@ -6,6 +6,7 @@ import org.skycastle.server.registry.Registry
 import java.util.concurrent.ConcurrentHashMap
 import org.skycastle.server.models.account.User
 import java.util.concurrent.atomic.AtomicLong
+import org.skycastle.server.services.storage.StorageService
 
 /**
  * Just stores things in memory.  Useful for testing.
@@ -21,9 +22,11 @@ class MemoryStorageService(registry: Registry) extends StorageService {
   /**
    * @return the model with the specified id.  Throws an exception if not found.
    */
-  def getOrNull[T <: Model](id: Long): T = {
+  def getOrNull[T <: Model](id: Long)(implicit kind: Class[T]): T = {
     ParameterChecker.requireNotNull(id, 'id)
-    storage.get(id).asInstanceOf[T]
+    val value: Model = storage.get(id)
+    if (!kind.isInstance(value)) throw new Error("Can not get entry with id "+id+" with a value of '" + value + "' as type " + kind)
+    value.asInstanceOf[T]
   }
 
   /**
@@ -71,6 +74,9 @@ class MemoryStorageService(registry: Registry) extends StorageService {
     accounts.contains(accountName)
   }
 
-  def init() {storage.clear()}
+  def init() {
+    storage.clear()
+  }
+
   def shutdown() {}
 }

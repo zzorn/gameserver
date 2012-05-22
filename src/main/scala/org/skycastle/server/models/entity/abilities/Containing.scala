@@ -32,7 +32,7 @@ class Containing extends Ability{
 
 
   private final val _contents: ArrayList[EntityId] = new ArrayList[EntityId]()
-  private final val unmodifiableContents: List[EntityId] = Collections.unmodifiableList(_contents)
+  @transient private lazy val unmodifiableContents: List[EntityId] = Collections.unmodifiableList(_contents)
 
   /**
    * Contents of the container.

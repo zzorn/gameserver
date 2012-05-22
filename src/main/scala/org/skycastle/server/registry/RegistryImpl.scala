@@ -1,11 +1,12 @@
 package org.skycastle.server.registry
 
-import org.skycastle.server.services.storage.MemoryStorageService
+import org.skycastle.server.services.storage.memory.MemoryStorageService
 import org.skycastle.server.services.network.MinaNetworkService
 import org.skycastle.server.services.Service
 import org.skycastle.server.services.authenticator.AuthenticationServiceImpl
 import org.skycastle.server.services.account.AccountServiceImpl
 import org.skycastle.server.utils.Logging
+import org.skycastle.server.services.storage.redis.RedisStorageService
 
 /**
  *
@@ -14,12 +15,15 @@ class RegistryImpl extends Registry with Logging {
 
   private var services: List[Service] = Nil
 
-  val port = 6283
+  val redisAddress = "localhost"
 
-  val storageService = addService(new MemoryStorageService(this))
+  val serverPort = 6283
+
+  //val storageService = addService(new MemoryStorageService(this))
+  val storageService = addService(new RedisStorageService(this, redisAddress))
   val accountService = addService(new AccountServiceImpl(this))
   val authenticationService = addService(new AuthenticationServiceImpl(this))
-  val networkService = addService(new MinaNetworkService(this, port, true))
+  val networkService = addService(new MinaNetworkService(this, serverPort, true))
 
   def init() {
     services foreach {service =>

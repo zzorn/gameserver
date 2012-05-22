@@ -16,29 +16,29 @@ trait StorageService extends Service {
   /**
    * @return the model with the specified id.  Throws an exception if not found.
    */
-  def get[T <: Model](id: Long): T = {
-    val value: T = getOrNull[T](id)
+  def get[T <: Model](id: Long)(implicit kind: Class[T]): T = {
+    val value: T = getOrNull[T](id)(kind)
     if (value == null) throw new Error("No reference found for model with id '"+id+"'")
     else value
   }
 
-  def getEntity(id: Long): Entity = get[Entity](id)
-  def getEntity(entityId: EntityId): Entity = get[Entity](entityId.id)
+  def getEntity(id: Long): Entity = get[Entity](id)(classOf[Entity])
+  def getEntity(entityId: EntityId): Entity = get[Entity](entityId.id)(classOf[Entity])
 
   /**
    * @return the model with the specified id.  Throws an exception if not found.
    */
-  def getOrNull[T <: Model](id: Long): T
+  def getOrNull[T <: Model](id: Long)(implicit kind: Class[T]): T
 
   /**
    * @return the model with the specified reference.  Throws an exception if not found.
    */
-  def get[T <: Model](modelRef: Ref[T]): T = get(modelRef.id)
+  def get[T <: Model](modelRef: Ref[T])(implicit kind: Class[T]): T = get(modelRef.id)(kind)
 
   /**
    * @return the model with the specified reference, or null if not found.
    */
-  def getOrNull[T <: Model](modelRef: Ref[T]): T = getOrNull(modelRef.id)
+  def getOrNull[T <: Model](modelRef: Ref[T])(implicit kind: Class[T]): T = getOrNull(modelRef.id)(kind)
 
   /**
    * Stores the specified model to the storage.
