@@ -17,6 +17,9 @@ import org.skycastle.server.models.EntityId
 /**
  *
  */
+// TODO: When receiving a message, convert it to a case class that has client callable annotation, by looking under actors package,
+//       then call the addressed actor ref, if it is callable by the user.  When sending a message, serialize the case class as json or similar,
+//       or convert to a message with the name of the case class and the parameters in a map (that way only data classes and common primitiveish types need to be serialized).
 class MinaNetworkService(registry: Registry,
                          port: Int,
                          closeSessionOnIdle: Boolean = true,
