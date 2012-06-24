@@ -4,12 +4,15 @@ Todo
 
 Next tasks:
 
-* Network service that listens to incoming client connections, and allows them to log in and send messages to services.
-  Use e.g. apache mina for networking.
-* Annotation for service methods that accept client messages
-* Message class for client messages - maybe use json?
-
-
+* Merge account handling
+* Annotation for actors that accept client messages, and case classes that can be used as client messages
+* Avatars observing other entities around them
+* Generate some resource entities in the world
+* Pickup, inventory
+* Claim building lot
+* Create worksite for project
+* Contribute work to project
+* Machines / processors that modify resources, possibly needing work or other consumables
 
 
 Functions provided by server for client:
