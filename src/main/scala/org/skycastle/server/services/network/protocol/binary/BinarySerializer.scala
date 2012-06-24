@@ -11,6 +11,10 @@ import org.skycastle.server.services.network.protocol.Message
  * Takes care of serializing and de-serializing a set of allowed types from byte buffers.
  */
 // TODO: Maybe refactor to separate the functions of encoding and decoding objects and defining the serializers.
+// TODO: Add frequency list of commonly occuring strings, weight by string length and frequency, in string serialization,
+//       add operations for 'add string alias, remove string alias', and either pass string as is, or refer to an alias.
+//       have some max length and max number for string aliases.  This works as long as a new BinarySerializer is created and
+//       maintained for each session.
 class BinarySerializer extends Logging {
 
   private val NULL_ID : Byte = 0
