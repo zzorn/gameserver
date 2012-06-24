@@ -7,6 +7,7 @@ import org.skycastle.server.services.authenticator.AuthenticationServiceImpl
 import org.skycastle.server.services.account.AccountServiceImpl
 import org.skycastle.server.utils.Logging
 import org.skycastle.server.services.storage.redis.RedisStorageService
+import org.skycastle.server.services.actor.AkkaActorService
 
 /**
  *
@@ -24,6 +25,7 @@ class RegistryImpl extends Registry with Logging {
   val accountService = addService(new AccountServiceImpl(this))
   val authenticationService = addService(new AuthenticationServiceImpl(this))
   val networkService = addService(new MinaNetworkService(this, serverPort, true))
+  val actorService = addService(new AkkaActorService(this))
 
   def init() {
     services foreach {service =>

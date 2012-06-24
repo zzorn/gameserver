@@ -4,7 +4,6 @@ import org.skycastle.server.registry.Registry
 import org.skycastle.server.models.entity.Entity
 import org.skycastle.server.models.account.User
 import org.skycastle.server.models.{EntityId, ModelRef, Ref}
-import org.skycastle.server.models.entity.abilities.{Located, Physical}
 
 /**
  *
@@ -24,15 +23,15 @@ class AccountServiceImpl(context: Registry) extends AccountService {
     val character = new Entity()
     initCharacter(character)
 
-    var characterId: EntityId = context.storageService.saveEntity(character)
-    user.characters ::= characterId
+    val characterId: EntityId = context.storageService.saveEntity(character)
+    user.characters.add(characterId)
     user.currentCharacter = characterId
     characterId
   }
 
   private def initCharacter(entity: Entity) {
-    entity.setAbility('physical, new Physical())
-    entity.setAbility('located, new Located())
+    //entity.setAbility('physical, new Physical())
+    //entity.setAbility('located, new Located())
 
     // TODO: Place in starting position and environment
   }

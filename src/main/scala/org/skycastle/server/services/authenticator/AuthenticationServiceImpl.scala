@@ -8,6 +8,10 @@ import org.skycastle.server.utils.StringUtils
 /**
  *
  */
+// TODO: Do an initial hashing of the password on the client side (with bcrypt), (with a server provided (user specific?) salt),
+//       so that we don't have to send the users password over the network in cleartext (allowing snooping it if the connection is unencrypted)
+//       TODO: Is that the normal way to handle the problem of sending a password to a server for checking?
+// TODO: Also implement a timeout after too many invalid guesses (allow 5 invalid attempts in five minutes or so)
 final class AuthenticationServiceImpl(context: Registry) extends AuthenticationService {
 
   def createAccount(accountName: String, pw: Array[Char]): AccountCreationResponse = {
@@ -20,7 +24,7 @@ final class AuthenticationServiceImpl(context: Registry) extends AuthenticationS
       // NOTE: Storing a password in a string has the drawback of leaving it in plaintext in memory until the string is
       // garbage collected and the memory is reused.  An Array[Char] can be wiped when the password is no longer used.
       // However, BCrypt wants the password in a String parameter, so pass it for now.
-      val hashedPassword = BCrypt.hashpw(new String(pw), BCrypt.gensalt(12));
+      val hashedPassword = BCrypt.hashpw(new String(pw), BCrypt.gensalt(12))
       clearCharArray(pw)
 
       val account = new User(accountName)

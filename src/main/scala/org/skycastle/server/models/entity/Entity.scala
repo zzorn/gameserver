@@ -1,6 +1,5 @@
 package org.skycastle.server.models.entity
 
-import abilities._
 import org.skycastle.server.utils.ParameterChecker
 import org.skycastle.server.models.{UndefinedId, EntityId, Model}
 
