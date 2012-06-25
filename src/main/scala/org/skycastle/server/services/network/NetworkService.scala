@@ -3,6 +3,7 @@ package org.skycastle.server.services.network
 import org.skycastle.server.services.Service
 import org.skycastle.server.models.EntityId
 import protocol.Message
+import akka.actor.ActorRef
 
 /**
  *
@@ -14,6 +15,6 @@ trait NetworkService extends Service {
    * @return true if message delivered (or delivery started), false if the session has expired or is no longer associated
    *         with the specified sender (in this case the caller can stop any future calls with that session and sender).
    */
-  def sendMessage(sender: EntityId, session: Long, message: Message): Boolean
+  def sendMessage(sender: ActorRef, session: Long, message: Any): Boolean
 
 }

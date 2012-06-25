@@ -13,6 +13,7 @@ import org.skycastle.server.services.network.protocol.binary.BinaryProtocol
 import org.skycastle.server.services.network.protocol.Message
 import org.skycastle.server.models.account.User
 import org.skycastle.server.models.EntityId
+import akka.actor.ActorRef
 
 /**
  *
@@ -42,7 +43,7 @@ class MinaNetworkService(registry: Registry,
   }
 
 
-  def sendMessage(sender: EntityId, session: Long, message: Message): Boolean = {
+  def sendMessage(sender: ActorRef, session: Long, message: Any): Boolean = {
     val gameSession: GameSession = gameSessions.get(session)
     if (gameSession != null && gameSession.controlledEntity == sender) {
       gameSession.sendMessage(message)
@@ -111,9 +112,13 @@ class MinaNetworkService(registry: Registry,
 
 
   private def createGameSession(session: IoSession): GameSession = {
+    val accountName: String = session.getAttribute(AuthenticationFilter.Account).asInstanceOf[String]
     // Create player session object
-    val account: User = registry.storageService.loadAccount(session.getAttribute(AuthenticationFilter.Account).asInstanceOf[String])
-    val gameSession = new GameSession(registry, session, account.accountName, account.currentCharacter)
+    val account: User = registry.storageService.loadAccount(accountName)
+
+    val accountActorRef = registry.actorService.getAccountActor(accountName)
+
+    val gameSession = new GameSession(registry, session, account.accountName, accountActorRef)
     gameSessions.put(session.getId, gameSession)
     gameSession.handleLoggedIn()
     gameSession
